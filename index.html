@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- Tienda generada con Harvys, asistente de e-commerce creado por el Profesor Harvey Sanabria -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repuestos Santul — Repuestos para tu vehículo, atención para ti.</title>
+<meta name="description" content="Repuestos automotrices con atención personalizada y ventas a domicilio y puerta a puerta. Sin punto físico.">
+<meta name="generator" content="Harvys — asistente de e-commerce del Profesor Harvey Sanabria">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="anim-media tarj-elevadas modo-claro">
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modal-pago" onclick="modalClickFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><h3>Confirmar pago</h3><button class="modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-total"><span class="tl">Total a pagar</span><span class="tm" id="modal-total-monto">$0</span></div>
+      <div class="pago-metodos" id="pago-metodos"></div>
+      <div class="pago-datos" id="pago-datos">
+        <div class="pd-label">Transferir a este número</div>
+        <div class="pd-numero" id="pd-numero"></div>
+        <div class="pd-nombre" id="pd-nombre"></div>
+        <button class="btn-copiar" onclick="copiarNumero()">📋 Copiar número</button>
+      </div>
+      <div class="pasos">
+        <div class="paso"><div class="paso-num">1</div><div class="paso-txt" id="paso-1"></div></div>
+        <div class="paso"><div class="paso-num">2</div><div class="paso-txt">Toca <strong>"Confirmar y enviar"</strong> — se abre WhatsApp con tu pedido</div></div>
+        <div class="paso"><div class="paso-num">3</div><div class="paso-txt" id="paso-3"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#" target="_blank" rel="noopener" class="btn-wsp" onclick="return prepararWsp(this)">✅ Confirmar y enviar por WhatsApp</a>
+      <button class="btn-seguir" onclick="cerrarModal()">← Seguir comprando</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+
+<!-- VISOR DE FOTOS -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto del producto">
+  <figure class="visor-caja">
+    <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto"><img id="visor-img" alt=""></div>
+    <figcaption><strong id="visor-nombre"></strong><span id="visor-precio"></span></figcaption>
+    <div class="visor-ayuda">Toca o haz clic en la foto para ampliarla más</div>
+  </figure>
+</div>
+
+<button class="carrito-fab" onclick="toggleCarrito()" id="fab" aria-label="Abrir carrito">🛒<span class="carrito-badge" id="badge">0</span></button>
+
+<div class="carrito-panel" id="panel-carrito">
+  <div class="panel-header"><h3>Tu pedido de repuestos</h3><button class="btn-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button></div>
+  <ul id="lista-carrito"></ul>
+  <div class="panel-footer">
+    <div class="total-row"><span class="total-lbl">Total</span><span class="total-monto" id="total">$0</span></div>
+    <div class="panel-btns"><button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button><button class="btn-pagar" onclick="pagar()">Coordinar pedido por WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ASISTENTE DE LA TIENDA (responde con los datos de esta tienda) -->
+<span class="as-aviso" id="as-aviso">¿Te ayudo? 👋</span>
+<button class="as-burbuja" id="as-burbuja" aria-label="Abrir el asistente de la tienda"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></button>
+<div class="as-panel" id="as-panel" role="dialog" aria-label="Santi">
+  <div class="as-cabecera">
+    <div class="as-avatar"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div><strong>Santi</strong><small><i></i> En línea</small></div>
+    <button id="as-cerrar" aria-label="Cerrar el asistente">✕</button>
+  </div>
+  <div class="as-mensajes" id="as-mensajes"></div>
+  <div class="as-chips" id="as-chips"></div>
+  <form class="as-form" id="as-form">
+    <input id="as-input" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </form>
+</div>
+
+<header class="hero hero-centrado">
+  <div class="hero-bg efecto-ninguno"></div>
+  <div class="hero-content">
+    <div>
+      
+      <div class="hero-badge">Repuestos automotrices · Atención personalizada</div>
+      <h1>Repuestos<span>Santul</span></h1>
+      <p class="hero-sub">Repuestos para tu vehículo, atención para ti. Domicilios en Bogotá y Soacha y envíos nacionales.</p>
+      <a href="#catalogo" class="btn-hero">Explorar repuestos
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-stats"><div class="hero-stat"><div class="num">6</div><div class="lbl">Repuestos en catálogo</div></div><div class="hero-stat"><div class="num">1–2 días</div><div class="lbl">Bogotá y Soacha</div></div><div class="hero-stat"><div class="num">3–5 días</div><div class="lbl">Envíos nacionales</div></div></div>
+    </div>
+    </div>
+  <div class="hero-scroll"><div></div></div>
+</header>
+
+<section class="banner-sec">
+  <div class="banner-glow"></div>
+  <div class="banner-content">
+    <div class="sec-label">Tu vehículo, en marcha</div>
+    <h2>Encuentra el repuesto <em>que necesitas</em></h2>
+    <p>Explora nuestras partes eléctricas, productos para motor, refrigerantes y rodamientos. Recibe atención personalizada por WhatsApp y coordina tu entrega. Sin punto físico; recogida personal previa coordinación.</p>
+    <div class="banner-chips"><span class="chip">Atención personalizada</span><span class="chip">Bogotá y Soacha: 1–2 días</span><span class="chip">Envíos nacionales: 3–5 días</span><span class="chip">Contraentrega local desde $100.000</span></div>
+  </div>
+</section>
+
+<div class="filtros-wrap" id="filtros-bar">
+  <div class="busqueda-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarBusqueda()">
+  </div>
+</div>
+<section class="catalogo-wrap" id="catalogo">
+  <div class="catalogo-header">
+    <div><div class="sec-label">Catálogo automotriz</div><div class="sec-title">Encuentra tu repuesto</div></div>
+    <div class="catalogo-count" id="cont-count"></div>
+  </div>
+  <div id="productos"></div>
+</section>
+
+<section class="beneficios-sec" id="beneficios">
+  <div class="sec-centro"><div class="sec-label">Por qué elegir Santul</div><div class="sec-title">Servicio que te acompaña</div></div>
+  <div class="beneficios-grid">
+    <div class="bcard"><div class="bcard-icono">🔧</div><h3>Productos de buena calidad</h3><p>Repuestos de buena calidad para el cuidado de tu vehículo.</p></div><div class="bcard"><div class="bcard-icono">🤝</div><h3>Atención personalizada</h3><p>Conversa con nosotros por WhatsApp sobre el repuesto que necesitas.</p></div><div class="bcard"><div class="bcard-icono">🚚</div><h3>Envíos rápidos</h3><p>Entregas en Bogotá y Soacha de 1 a 2 días; envíos nacionales de 3 a 5 días.</p></div><div class="bcard"><div class="bcard-icono">💛</div><h3>Buenos precios</h3><p>Consulta los precios de nuestros repuestos y arma tu pedido.</p></div>
+  </div>
+</section>
+
+<section class="recs-sec">
+  <div class="sec-label">Explora el catálogo</div>
+  <div class="sec-title">Repuestos para conocer</div>
+  <div class="recs-grid" id="recomendados"></div>
+</section>
+
+<section class="top-sec">
+  <div class="sec-label">Los favoritos de la comunidad</div>
+  <div class="sec-title">Repuestos más votados</div>
+  <div class="top-grid" id="top"></div>
+</section>
+
+<section class="duelo-sec">
+  <div class="sec-label">Tu opinión cuenta</div>
+  <div class="sec-title">¿Qué repuesto te interesa más?</div>
+  <div class="duelo-arena" id="duelo"></div>
+  <p class="duelo-info">Elige el que más te interesa para subirlo en el ranking. Esta votación no indica compatibilidad con tu vehículo.</p>
+</section>
+
+<section class="horarios-sec">
+  <div class="sec-label">Atención personalizada</div>
+  <div class="sec-title">Horarios de atención</div>
+  <ul class="horarios-lista"><li>🕒 Lunes a viernes: 8:00 a. m. a 6:00 p. m.</li><li>🕒 Sábados: 8:00 a. m. a 2:00 p. m.</li></ul>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca"><h3>Repuestos Santul</h3><p>Repuestos automotrices con atención personalizada. Ventas a domicilio y puerta a puerta, sin punto físico. Ciudad base: Bogotá D.C. Entregas en Bogotá y Soacha y envíos nacionales. Atención de lunes a viernes de 8:00 a. m. a 6:00 p. m. y sábados de 8:00 a. m. a 2:00 p. m.</p></div>
+    <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/573045824287" target="_blank" rel="noopener">WhatsApp: +57 3045824287</a></li><li>📍 Bogotá D.C.</li></ul></div>
+    <div class="footer-col"><h4>Pagos</h4><ul><li>Efectivo</li><li>Nequi</li><li>Daviplata</li><li>Transferencia bancaria</li><li>Bre-b · Llave: 1000726899</li><li>Contraentrega</li></ul></div>
+    <div class="footer-col"><h4>Categorías</h4><ul><li>Partes Eléctricas</li><li>Motor</li><li>Refrigerantes</li><li>Rodamientos</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Repuestos Santul — Todos los derechos reservados</span>
+    <span>Repuestos Santul · Repuestos para tu vehículo, atención para ti.</span>
+  </div>
+  <div class="footer-credito">
+    Creada con <strong>Harvys</strong> · Prof. Harvey Sanabria ·
+    <a href="https://wa.me/573103323843?text=Hola%20Profesor%20Harvey%2C%20vi%20una%20tienda%20creada%20con%20Harvys%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">WhatsApp 310 332 3843</a>
+  </div>
+</footer>
+
+<!-- Copia del proyecto para volver a abrirlo en Harvys (botón "Abrir"). No la borres. -->
+<script type="application/json" id="harvys-proyecto">{"negocio":{"nombre":"Repuestos Santul","descripcion":"Repuestos automotrices con atención personalizada y ventas a domicilio y puerta a puerta. Sin punto físico.","eslogan":"Repuestos para tu vehículo, atención para ti.","ciudad":"Bogotá D.C.","cobertura":"Domicilios en Bogotá y Soacha: 1 a 2 días. Envíos nacionales: 3 a 5 días fuera de estas ciudades. Recogida personal previa coordinación, sin punto físico; lugar por confirmar. Costo del envío por confirmar.","whatsapp":"573045824287","instagram":"","facebook":"","tiktok":"","horarios":["Lunes a viernes: 8:00 a. m. a 6:00 p. m.","Sábados: 8:00 a. m. a 2:00 p. m."],"logo":""},"tema":{"nombreEstilo":"Santul azul moderno","modo":"claro","colores":{"primario":"#164A86","textoSobrePrimario":"#FFFFFF","fondo":"#F4F7FC","fondoAlterno":"#E8EFF8","tarjeta":"#FFFFFF","texto":"#152C49","textoSuave":"#4D6078","acento":"#F4C430"},"fuentes":{"titulos":"Space Grotesk","cuerpo":"DM Sans"},"titulosMayusculas":false,"radio":20,"animaciones":"media","fondoEfecto":"ninguno","hero":"centrado","tarjetas":"elevadas"},"textos":{"heroEtiqueta":"Repuestos automotrices · Atención personalizada","heroTitulo":"Repuestos","heroTituloResaltado":"Santul","heroSubtitulo":"Repuestos para tu vehículo, atención para ti. Domicilios en Bogotá y Soacha y envíos nacionales.","heroBoton":"Explorar repuestos","heroImagen":"","estadisticas":[{"valor":"{productos}","etiqueta":"Repuestos en catálogo"},{"valor":"1–2 días","etiqueta":"Bogotá y Soacha"},{"valor":"3–5 días","etiqueta":"Envíos nacionales"}],"bannerEtiqueta":"Tu vehículo, en marcha","bannerTitulo":"Encuentra el repuesto","bannerTituloResaltado":"que necesitas","bannerTexto":"Explora nuestras partes eléctricas, productos para motor, refrigerantes y rodamientos. Recibe atención personalizada por WhatsApp y coordina tu entrega. Sin punto físico; recogida personal previa coordinación.","chips":["Atención personalizada","Bogotá y Soacha: 1–2 días","Envíos nacionales: 3–5 días","Contraentrega local desde $100.000"],"catalogoEtiqueta":"Catálogo automotriz","catalogoTitulo":"Encuentra tu repuesto","botonAgregar":"+ Agregar al carrito","beneficiosEtiqueta":"Por qué elegir Santul","beneficiosTitulo":"Servicio que te acompaña","recomendadosEtiqueta":"Explora el catálogo","recomendadosTitulo":"Repuestos para conocer","topEtiqueta":"Los favoritos de la comunidad","topTitulo":"Repuestos más votados","dueloEtiqueta":"Tu opinión cuenta","dueloTitulo":"¿Qué repuesto te interesa más?","dueloInfo":"Elige el que más te interesa para subirlo en el ranking. Esta votación no indica compatibilidad con tu vehículo.","testimoniosEtiqueta":"Experiencias con Santul","testimoniosTitulo":"Opiniones de nuestros clientes","horariosEtiqueta":"Atención personalizada","horariosTitulo":"Horarios de atención","footerTexto":"Repuestos automotrices con atención personalizada. Ventas a domicilio y puerta a puerta, sin punto físico. Ciudad base: Bogotá D.C. Entregas en Bogotá y Soacha y envíos nacionales. Atención de lunes a viernes de 8:00 a. m. a 6:00 p. m. y sábados de 8:00 a. m. a 2:00 p. m.","footerFrase":"Repuestos Santul · Repuestos para tu vehículo, atención para ti.","carritoTitulo":"Tu pedido de repuestos","botonPagar":"Coordinar pedido por WhatsApp"},"productos":[{"id":"santul-01","nombre":"Bujía Precalentamiento NPR NQR NKR NHR 729 NHR 700 DMAX 2.5 3.0","precio":34000,"categoria":"Partes Eléctricas","imagen":"foto:10putb","descripcion":"Confirma por WhatsApp la referencia y compatibilidad con tu vehículo antes de pedir.","opciones":null,"destacado":false},{"id":"santul-02","nombre":"Bobina Cruz 2011-2017","precio":250000,"categoria":"Partes Eléctricas","imagen":"foto:i6jxob","descripcion":"Referencia y denominación suministradas por el negocio. Confirma por WhatsApp la compatibilidad antes de pedir.","opciones":null,"destacado":false},{"id":"santul-03","nombre":"Pera Reversa Aveo Optra Corsa Lanos Cielo Nubira","precio":23000,"categoria":"Partes Eléctricas","imagen":"foto:j5gcb5","descripcion":"Confirma por WhatsApp la referencia y compatibilidad con tu vehículo antes de pedir.","opciones":null,"destacado":false},{"id":"santul-04","nombre":"Silicona Reinzosil","precio":14000,"categoria":"Motor","imagen":"foto:29xi07","descripcion":"Consulta por WhatsApp la presentación y aplicación antes de pedir.","opciones":null,"destacado":false},{"id":"santul-05","nombre":"Refrigerante Motor Naranja 50/50 ACDELCO","precio":52000,"categoria":"Refrigerantes","imagen":"foto:wtm8bg","descripcion":"Consulta por WhatsApp la presentación y compatibilidad antes de pedir.","opciones":null,"destacado":false},{"id":"santul-06","nombre":"Rodamiento Delantero Interno Luv 2,3 Hilux Dmax 4*2","precio":19000,"categoria":"Rodamientos","imagen":"foto:9f53k8","descripcion":"Confirma por WhatsApp la referencia y compatibilidad con tu vehículo antes de pedir.","opciones":null,"destacado":false}],"beneficios":[{"icono":"🔧","titulo":"Productos de buena calidad","texto":"Repuestos de buena calidad para el cuidado de tu vehículo."},{"icono":"🤝","titulo":"Atención personalizada","texto":"Conversa con nosotros por WhatsApp sobre el repuesto que necesitas."},{"icono":"🚚","titulo":"Envíos rápidos","texto":"Entregas en Bogotá y Soacha de 1 a 2 días; envíos nacionales de 3 a 5 días."},{"icono":"💛","titulo":"Buenos precios","texto":"Consulta los precios de nuestros repuestos y arma tu pedido."}],"testimonios":[],"pagos":{"metodos":[{"nombre":"Efectivo","icono":"💵","tipo":"efectivo"},{"nombre":"Nequi","icono":"💜","tipo":"transferencia"},{"nombre":"Daviplata","icono":"🔴","tipo":"transferencia"},{"nombre":"Transferencia bancaria","icono":"🏦","tipo":"transferencia"},{"nombre":"Bre-b · Llave: 1000726899","icono":"🟡","tipo":"transferencia"},{"nombre":"Contraentrega","icono":"🚚","tipo":"contraentrega"}],"numeroTransferencia":"3045824287","titular":"Santiago Ballesteros Rodriguez","contraentregaDetalle":"Disponible en Bogotá y Soacha para pedidos desde $100.000. Cobro en efectivo al dueño del negocio o repartidor. Sin costo adicional por contraentrega; costo del envío por confirmar."},"backend":{"url":"https://script.google.com/macros/s/AKfycbxFHrmGZsLfcV1Dxy9aGPVbScjpJO-YYKzwOWZ1wMOMR2MdhPzMOm5bMJD03Wvumrcs/exec"},"asistente":{"activo":true,"nombre":"Santi","saludo":"¡Hola! Soy Santi, el asistente de Repuestos Santul. Te ayudo a consultar repuestos, precios y entregas. Atendemos de lunes a viernes de 8:00 a. m. a 6:00 p. m. y sábados de 8:00 a. m. a 2:00 p. m. Para confirmar compatibilidad con tu vehículo, escríbenos por WhatsApp."},"secciones":["banner","catalogo","beneficios","recomendados","top","duelo","horarios"],"personalizado":{"css":"input, select, textarea { border: 1px solid #C5C5C5; }\nhr { border: 0; border-top: 1px solid #C5C5C5; }\nbutton { border: 1px solid #455568; }\nbutton:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #182B40; outline-offset: 3px; }","secciones":[]}}</script>
+<script type="application/json" id="harvys-rutas">{"santul-01":"img/bujia-precalentamiento-npr-nqr-nkr-nhr-729-nhr-700-dmax-2-5-3-0-10putb.jpg","santul-02":"img/bobina-cruz-2011-2017-i6jxob.jpg","santul-03":"img/pera-reversa-aveo-optra-corsa-lanos-cielo-nubira-j5gcb5.jpg","santul-04":"img/silicona-reinzosil-29xi07.jpg","santul-05":"img/refrigerante-motor-naranja-50-50-acdelco-wtm8bg.jpg","santul-06":"img/rodamiento-delantero-interno-luv-2-3-hilux-dmax-4x2-9f53k8.jpg"}</script>
+<script src="script.js"></script>
+</body>
+</html>
